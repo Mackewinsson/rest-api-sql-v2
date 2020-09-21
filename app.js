@@ -4,15 +4,18 @@
 const express = require("express");
 const morgan = require("morgan");
 const { Sequelize } = require("sequelize");
+const { Course } = require("./models");
 
-// (async () => {
-//   try {
-//     await Sequelize.authenticate();
-//     console.log("Connection has been established successfully.");
-//   } catch (error) {
-//     console.error("Unable to connect to the database:", error);
-//   }
-// })();
+// Testing the connection to sqlite
+const sequelize = new Sequelize("sqlite::memory:");
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+})();
 
 // variable to enable global error logging
 const enableGlobalErrorLogging =
@@ -27,7 +30,7 @@ app.use(morgan("dev"));
 // TODO setup your api routes here
 
 // setup a friendly greeting for the root route
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.json({
     message: "Welcome to the REST API project!",
   });
