@@ -1,0 +1,14 @@
+{
+  "development": {
+    "database": "fsjstd-restapi",
+    "storage:": "sqlite"
+  },
+  "test": {
+    "database": "fsjstd-restapi",
+    "storage:": "sqlite"
+  },
+  "production": {
+    "database": "fsjstd-restapi",
+    "storage:": "sqlite"
+  }
+}
