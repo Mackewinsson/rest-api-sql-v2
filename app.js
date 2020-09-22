@@ -17,6 +17,17 @@ const sequelize = new Sequelize("sqlite::memory:");
   }
 })();
 
+/* Handler function to wrap each route. */
+function asyncHandler(cb) {
+  return async (req, res, next) => {
+    try {
+      await cb(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
 // variable to enable global error logging
 const enableGlobalErrorLogging =
   process.env.ENABLE_GLOBAL_ERROR_LOGGING === "true";
@@ -36,6 +47,46 @@ app.get("/", async (req, res) => {
   });
 });
 
+// GET /api/users 200 - Returns the currently authenticated user
+app.get(
+  "/api/users",
+  asyncHandler(async (req, res) => {})
+);
+// POST /api/users 201 - Creates a user, sets the Location header to "/", and returns no content
+app.post(
+  "/api/users",
+  asyncHandler(async (req, res) => {})
+);
+
+// GET /api/courses 200 - Returns a list of courses (including the user that owns each course)
+app.get(
+  "/api/courses",
+  asyncHandler(async (req, res) => {})
+);
+
+// GET /api/courses/:id 200 - Returns the course (including the user that owns the course) for the provided course ID
+app.get(
+  "/api/courses/:id",
+  asyncHandler(async (req, res) => {})
+);
+
+// POST /api/courses 201 - Creates a course, sets the Location header to the URI for the course, and returns no content
+app.post(
+  "/api/courses",
+  asyncHandler(async (req, res) => {})
+);
+
+// PUT /api/courses/:id 204 - Updates a course and returns no content
+app.put(
+  "/api/courses/:id",
+  asyncHandler(async (req, res) => {})
+);
+
+// DELETE /api/courses/:id 204 - Deletes a course and returns no content
+app.delete(
+  "/api/courses/:id",
+  asyncHandler(async (req, res) => {})
+);
 // send 404 if no other route matched
 app.use((req, res) => {
   res.status(404).json({
