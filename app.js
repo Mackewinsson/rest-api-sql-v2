@@ -5,28 +5,12 @@ const express = require("express");
 const morgan = require("morgan");
 const { Sequelize } = require("sequelize");
 const { Course } = require("./models");
+const testDbConection = require('./db/dbconection');
+const routes = require("./routes/routes");
+const asyncHandler = require('./utils/asyncHandler');
+// Test DB conectiont
+testDbConection()
 
-// Testing the connection to sqlite
-const sequelize = new Sequelize("sqlite::memory:");
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-})();
-
-/* Handler function to wrap each route. */
-function asyncHandler(cb) {
-  return async (req, res, next) => {
-    try {
-      await cb(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  };
-}
 
 // variable to enable global error logging
 const enableGlobalErrorLogging =
@@ -35,58 +19,28 @@ const enableGlobalErrorLogging =
 // create the Express app
 const app = express();
 
+// Setup request body JSON parsing.
+app.use(express.json());
+
 // setup morgan which gives us http request logging
 app.use(morgan("dev"));
 
 // TODO setup your api routes here
 
 // setup a friendly greeting for the root route
-app.get("/", async (req, res) => {
-  res.json({
-    message: "Welcome to the REST API project!",
-  });
-});
 
-// GET /api/users 200 - Returns the currently authenticated user
 app.get(
-  "/api/users",
-  asyncHandler(async (req, res) => {})
-);
-// POST /api/users 201 - Creates a user, sets the Location header to "/", and returns no content
-app.post(
-  "/api/users",
-  asyncHandler(async (req, res) => {})
-);
-
-// GET /api/courses 200 - Returns a list of courses (including the user that owns each course)
-app.get(
-  "/api/courses",
-  asyncHandler(async (req, res) => {})
+  "/",
+  asyncHandler(async (req, res) => {
+    res.status('200').json({
+      message: "Welcome to the REST API project!",
+    });
+  })
 );
 
-// GET /api/courses/:id 200 - Returns the course (including the user that owns the course) for the provided course ID
-app.get(
-  "/api/courses/:id",
-  asyncHandler(async (req, res) => {})
-);
+// Routes
+app.use("/api", routes);
 
-// POST /api/courses 201 - Creates a course, sets the Location header to the URI for the course, and returns no content
-app.post(
-  "/api/courses",
-  asyncHandler(async (req, res) => {})
-);
-
-// PUT /api/courses/:id 204 - Updates a course and returns no content
-app.put(
-  "/api/courses/:id",
-  asyncHandler(async (req, res) => {})
-);
-
-// DELETE /api/courses/:id 204 - Deletes a course and returns no content
-app.delete(
-  "/api/courses/:id",
-  asyncHandler(async (req, res) => {})
-);
 // send 404 if no other route matched
 app.use((req, res) => {
   res.status(404).json({

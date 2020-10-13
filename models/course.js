@@ -17,11 +17,19 @@ module.exports = (sequelize, DataTypes) => {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
+
       },
       title: DataTypes.STRING,
       description: DataTypes.STRING,
-      estimatedTime: DataTypes.STRING,
-      materialsNeeded: DataTypes.STRING,
+      estimatedTime: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      materialsNeeded: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      }
     },
     {
       sequelize,
@@ -29,4 +37,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   return Course;
+  
 };
