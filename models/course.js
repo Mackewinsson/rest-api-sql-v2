@@ -29,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       materialsNeeded: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
       }
     },
     {
